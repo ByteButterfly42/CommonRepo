@@ -1,0 +1,2235 @@
+{
+	"info": {
+		"_postman_id": "3c71fd32-d29e-4792-887c-bb26c843cf78",
+		"name": "Paysis",
+		"description": "## Paysis - example of a simple payment system\n\n###### created by Dusty Dump\n\n###### for PASV online IT academy (course QA Manual)\n\n### Description\n\nThe following is a collection of API calls that are based on a public API server ( [Paysis](https://github.com/bormando/paysis) ) that imitates a common payment service. Paysis is a Web API that provides **CRUD** (**C**reate, **R**ead, **U**pdate, **D**elete) functionalities and features an authentication mechanism that utilizes Bearer Tokens. The API is free of bugs and does not contain pre-loaded data. Additionally, the server resets itself whenever it falls into sleep mode, and all data can be cleared using a `Delete Config` request.\n\nFurther information regarding the available API calls is provided below. Each call is accompanied by both successful and unsuccessful examples.\n\nIt is important to highlight that this project was designed for educational purposes only, and\n\nhas been made public to facilitate multi-access by students.\n\n### Story\n\nAs an owner, you may log in using an admin role to create users and transactions associated with these users. Furthermore, minor adjustments can be made to the server configuration.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "27291499"
+	},
+	"item": [
+		{
+			"name": "General",
+			"item": [
+				{
+					"name": "Authentication/Authorization",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json()\r",
+									"\r",
+									"pm.environment.set(\"token\", res.token);\r",
+									"\r",
+									"pm.test('check the status code', ()=>{\r",
+									"    pm.expect(pm.response.to.have.status(200))\r",
+									"})\r",
+									"\r",
+									"pm.test('check if response contains token', ()=>{\r",
+									"    pm.expect(res.token).to.be.a('string')\r",
+									"})\r",
+									"\r",
+									"pm.test(\"check response has property token\", ()=>{\r",
+									"    pm.expect(res).to.haveOwnProperty('token')\r",
+									"\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear()"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"login\": \"adminius\",\n    \"password\": \"supers3cret\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/auth"
+					},
+					"response": [
+						{
+							"name": "Auth_Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"login\": \"{{login}}\",\n    \"password\": \"{{password}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/auth"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 19:34:00 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "48"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"30-TzseW1O/DnSrohd/QmJwt/TE/kc\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BUo6ChiTyK4EMoQ="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"token\": \"d70eb487-f994-4221-aa14-92fd27735424\"\n}"
+						},
+						{
+							"name": "Auth_Invalid_credentials",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"login\": \"{{login1}}\",\n    \"password\": \"{{password}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/auth"
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 19:34:36 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "38"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"26-3//4D3ohteJdnfXwNdNhlnietmU\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BUo_5jclyK4EMqA="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Wrong login or password.\"\n}"
+						}
+					]
+				}
+			],
+			"description": "##### Contains authorization request called with login/password credentials and returns token in response."
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.clear()\r",
+									"\r",
+									"const createUser = {\r",
+									"    url: environment.baseUrl+'/users',\r",
+									"    method: `POST`,\r",
+									"    header: {'Authorization':'Bearer'+environment.token},\r",
+									"    body: {}\r",
+									"}\r",
+									"\r",
+									"\r",
+									"for(let i=0; i<4; i+=1){\r",
+									"    pm.sendRequest(createUser)\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json()\r",
+									"\r",
+									"const getAllUsers = {\r",
+									"    url: environment.baseUrl+'/users',\r",
+									"    method: `GET`,\r",
+									"    header: {'Authorization': environment.token},\r",
+									"    body: {}\r",
+									"}\r",
+									"\r",
+									"pm.sendRequest(getAllUsers, (error, response)=>{\r",
+									"    let arr\r",
+									"    if(response){arr = (response.json())}\r",
+									"    else console.log(error)\r",
+									"  \r",
+									"    console.log(arr)\r",
+									"\r",
+									"    pm.environment.set('userFrom', arr[0].id)\r",
+									"    pm.environment.set('userTo', arr[1].id)\r",
+									"    pm.environment.set('userToDelete', arr[arr.length-1].id)\r",
+									"    \r",
+									"})\r",
+									"\r",
+									"\r",
+									"pm.test('check response status code', ()=>{\r",
+									"    pm.expect(pm.response.to.have.status(200))\r",
+									"})\r",
+									"\r",
+									"pm.test('check if id is not empty and contains string', ()=>{\r",
+									"    pm.expect(res.id).not.to.be.empty\r",
+									"    pm.expect(res.id).to.be.a('string')\r",
+									"})\r",
+									"\r",
+									"pm.test('check amount is correct', ()=>{\r",
+									"    pm.expect(res.amount).to.eq(1000)\r",
+									"})\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{Token}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/users"
+					},
+					"response": [
+						{
+							"name": "Create User_successful",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/users"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:00:41 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "59"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"3b-AjdVdtaJmt9zt1jfwOHGgH9RH4Q\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BU-Zegv9SK4EJ4A="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"32c2a1a0-428f-4c0e-a8f9-c680cb3a9c8a\",\n    \"amount\": 1000\n}"
+						},
+						{
+							"name": "Create User_without token",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/users"
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:01:10 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "27"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"1b-OTB0WjV/ub4RM7iikeBhQVBUCR0\""
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BU-d9i8xyK4EJUQ="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Unauthorized.\"\n}"
+						},
+						{
+							"name": "Create User_auth required",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/users"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:11:16 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"1f-4yUdQzk0xrzeRWFQPUGtQgA/4SY\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BU_8cjICyK4EJ-A="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Wrong auth token.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json()\r",
+									"\r",
+									"pm.test('check response status code', ()=>{\r",
+									"    pm.expect(pm.response.to.have.status(200))\r",
+									"})\r",
+									"\r",
+									"pm.test('check response has correct message', ()=>{\r",
+									"    pm.expect(res.message).to.eq('User deleted.')\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"485a81d1-5241-42c5-89e7-8caa8cb3ac4d\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/users"
+					},
+					"response": [
+						{
+							"name": "Delete User_successful",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"c16e927b-55bf-4874-9ac5-629ac718c9c6\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/users"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:17:04 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "27"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"1b-nQJLwziqjyC8PHZoc+nZ+mgUl6M\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVAzMh6IyK4EJvA="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"User deleted.\"\n}"
+						},
+						{
+							"name": "Delete User_invalid user id",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"ec83e3c0-5c41-4c7c-ae23-26a48f6d7818\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/users"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:16:12 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "28"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"1c-LU8p3p31yfR387GAn1efRjXVq0k\""
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVArCjTOSK4EJkg="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"No user found.\"\n}"
+						},
+						{
+							"name": "Delete User_auth required",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"ec83e3c0-5c41-4c7c-ae23-26a48f6d7818\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/users"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:11:59 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"1f-4yUdQzk0xrzeRWFQPUGtQgA/4SY\""
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVADaidTyK4EJ4A="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Wrong auth token.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{Token}}"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "id",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Users_successful",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/users"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:18:00 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "241"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"f1-zATob40/sScdh0l/Cgf5mk56AW0\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVA7yjf-yK4EJFA="
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": \"d51cb605-4572-42b3-8170-1e3bba83b285\",\n        \"amount\": 1000\n    },\n    {\n        \"id\": \"9d6fc631-1b5e-46d2-9cec-d7646badf431\",\n        \"amount\": 1000\n    },\n    {\n        \"id\": \"6d9c7cf5-693c-4200-81d3-c3ca212ec3e2\",\n        \"amount\": 1000\n    },\n    {\n        \"id\": \"d4a82c9f-7827-461e-9dd7-435c411a491c\",\n        \"amount\": 1000\n    }\n]"
+						},
+						{
+							"name": "Get Users_auth required",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/users"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:12:38 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"1f-4yUdQzk0xrzeRWFQPUGtQgA/4SY\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVAJki3ZyK4EJ4g="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Wrong auth token.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get User by ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{Token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/users?id=2b6e2711-402e-46db-9661-3ea88e914186",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2b6e2711-402e-46db-9661-3ea88e914186"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get User by ID_successful",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users?id=d51cb605-4572-42b3-8170-1e3bba83b285",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "d51cb605-4572-42b3-8170-1e3bba83b285"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:20:33 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "59"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"3b-3Yc9dNyht8aILG/99ew/QLsJLqA\""
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVBTvhiXSK4EJ8g="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"d51cb605-4572-42b3-8170-1e3bba83b285\",\n    \"amount\": 1000\n}"
+						},
+						{
+							"name": "Get User by ID_invalid sender id",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users?id=50ee12ed-528b-4b71-a3bf-dd993ceffdbd",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "50ee12ed-528b-4b71-a3bf-dd993ceffdbd"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:19:49 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "28"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"1c-LU8p3p31yfR387GAn1efRjXVq0k\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVBM6hl6SK4EJ0g="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"No user found.\"\n}"
+						},
+						{
+							"name": "Get User by ID_auth required",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users?id=50ee12ed-528b-4b71-a3bf-dd993ceffdbd",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "50ee12ed-528b-4b71-a3bf-dd993ceffdbd"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:12:59 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"1f-4yUdQzk0xrzeRWFQPUGtQgA/4SY\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVAM2i0eSK4EJUw="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Wrong auth token.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{Token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"2b6e2711-402e-46db-9661-3ea88e914186\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/users"
+					},
+					"response": []
+				}
+			],
+			"description": "##### Contains user creation/deletion/reading requests"
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "Create Transaction",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{Token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"from\": \"2b6e2711-402e-46db-9661-3ea88e914186\",\n    \"to\": \"2b6e2711-402e-46db-9661-3ea88e914186\",\n    \"amount\": 500\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/transactions"
+					},
+					"response": [
+						{
+							"name": "Create Transaction_successful",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"from\": \"d51cb605-4572-42b3-8170-1e3bba83b285\",\n    \"to\": \"9d6fc631-1b5e-46d2-9cec-d7646badf431\",\n    \"amount\": 500\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/transactions"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:22:30 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "148"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"94-DIn8Utm7/sHfSCXJvazEehqVKho\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVBmCji3SK4EJgw="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"50ec5bc4-0311-4db2-884c-71c07af7e07c\",\n    \"from\": \"d51cb605-4572-42b3-8170-1e3bba83b285\",\n    \"to\": \"9d6fc631-1b5e-46d2-9cec-d7646badf431\",\n    \"amount\": 500\n}"
+						},
+						{
+							"name": "Create Transaction_invalid user id",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"from\": \"d51cb605-4572-42b3-8170-1e3bttba83b285\",\n    \"to\": \"9d6fc631-1b5e-46d2-9cec-d7646badf431\",\n    \"amount\": 500\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/transactions"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:23:48 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"1f-TwBFKlwp11SROvdNgU/gB7UIMEo\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVByNha5yK4EJYA="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Sender not found.\"\n}"
+						},
+						{
+							"name": "Create Transaction_invalid receiver id",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"from\": \"d51cb605-4572-42b3-8170-1e3bba83b285\",\n    \"to\": \"9d6fc631-1b5e-46d2-9cec-d7646badf4ttt31\",\n    \"amount\": 500\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/transactions"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:24:28 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "33"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"21-oK8AFp6koFjeUMUnH/2uPrWdrP8\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVB4biI7yK4EJ8g="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Receiver not found.\"\n}"
+						},
+						{
+							"name": "Create Transaction_invalid amount",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"from\": \"d51cb605-4572-42b3-8170-1e3bba83b285\",\n    \"to\": \"9d6fc631-1b5e-46d2-9cec-d7646badf431\",\n    \"amount\": 500\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/transactions"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:25:23 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "47"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"2f-CU8ADYt//+XKRMClOg24yJvVq/U\""
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVCBDgKfSK4EJkA="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Sender doesn't have enough money.\"\n}"
+						},
+						{
+							"name": "Create Transaction_auth required",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"from\": \"50ee12ed-528b-4b71-a3bf-dd993ceffdbd\",\n    \"to\": \"4a93a774-09c3-465e-8b03-edfcc3aa1319\",\n    \"amount\": 500\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/transactions"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:13:26 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"1f-4yUdQzk0xrzeRWFQPUGtQgA/4SY\""
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVARGgqRyK4EJ0g="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Wrong auth token.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Transactions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{Token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/transactions"
+					},
+					"response": [
+						{
+							"name": "Get Transactions_successful",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "{{baseUrl}}/transactions"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:26:34 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "599"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"257-X9RZCj9oEsnFLxjnAeWmR/P5Wdo\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVCMQgmVSK4EJeA="
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": \"50ec5bc4-0311-4db2-884c-71c07af7e07c\",\n        \"from\": \"d51cb605-4572-42b3-8170-1e3bba83b285\",\n        \"to\": \"9d6fc631-1b5e-46d2-9cec-d7646badf431\",\n        \"amount\": 500\n    },\n    {\n        \"id\": \"a20e84ca-e3d8-4427-982e-a36a40471e4f\",\n        \"from\": \"d51cb605-4572-42b3-8170-1e3bba83b285\",\n        \"to\": \"9d6fc631-1b5e-46d2-9cec-d7646badf431\",\n        \"amount\": 500\n    },\n    {\n        \"id\": \"08358e60-c559-4e30-9082-fc86ded4cdd0\",\n        \"from\": \"d51cb605-4572-42b3-8170-1e3bba83b285\",\n        \"to\": \"9d6fc631-1b5e-46d2-9cec-d7646badf431\",\n        \"amount\": -500\n    },\n    {\n        \"id\": \"58794ed6-64bb-4bcb-b3c6-11d612ab0a93\",\n        \"from\": \"d51cb605-4572-42b3-8170-1e3bba83b285\",\n        \"to\": \"9d6fc631-1b5e-46d2-9cec-d7646badf431\",\n        \"amount\": -500\n    }\n]"
+						},
+						{
+							"name": "Get Transactions_auth required",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": "{{baseUrl}}/transactions"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:14:00 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"1f-4yUdQzk0xrzeRWFQPUGtQgA/4SY\""
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVAWYgqLSK4EJvQ="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Wrong auth token.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Transactions by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{Token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/transactions?id=86d87eeb-0f80-400f-8dda-a94d8e1a5734",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "86d87eeb-0f80-400f-8dda-a94d8e1a5734"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Transactions by ID_successful",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/transactions?id=50ec5bc4-0311-4db2-884c-71c07af7e07c",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"transactions"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "50ec5bc4-0311-4db2-884c-71c07af7e07c"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:29:00 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "148"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"94-DIn8Utm7/sHfSCXJvazEehqVKho\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVCi-g8jSK4EJPQ="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"50ec5bc4-0311-4db2-884c-71c07af7e07c\",\n    \"from\": \"d51cb605-4572-42b3-8170-1e3bba83b285\",\n    \"to\": \"9d6fc631-1b5e-46d2-9cec-d7646badf431\",\n    \"amount\": 500\n}"
+						},
+						{
+							"name": "Get Transactions by ID_invalid transaction id",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/transactions?id=20c8c38c-288f-47d7-b78b-2f7929c03e17",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"transactions"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "20c8c38c-288f-47d7-b78b-2f7929c03e17"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:28:09 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "35"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"23-98Wq7E7tG5n4tWN6dJIXSlCtgss\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVCa-hYWyK4EJVQ="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"No transaction found.\"\n}"
+						},
+						{
+							"name": "Get Transactions by ID_auth required",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/transactions?id=20c8c38c-288f-47d7-b78b-2f7929c03e17",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"transactions"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "20c8c38c-288f-47d7-b78b-2f7929c03e17"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:14:16 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"1f-4yUdQzk0xrzeRWFQPUGtQgA/4SY\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVAY3jkhyK4EJ-A="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Wrong auth token.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Transaction",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{Token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"86d87eeb-0f80-400f-8dda-a94d8e1a5734\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/transactions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "897e8cf3-fa66-4b20-bb15-981029d2daae",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "##### Transaction creation/deletion/reading"
+		},
+		{
+			"name": "Config",
+			"item": [
+				{
+					"name": "Get Config",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{Token}}"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": "{{base_url}}/config"
+					},
+					"response": [
+						{
+							"name": "Get Config_successful",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": "{{baseUrl}}/config"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:29:59 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "46"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"2e-OscF2RSBheYB+QEIVSLU15QXbgY\""
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVCsOj65SK4EJvA="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"number_of_entries\": 25,\n    \"initial_amount\": 1000\n}"
+						},
+						{
+							"name": "Get Config_auth required",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": "{{baseUrl}}/config"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:14:39 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"1f-4yUdQzk0xrzeRWFQPUGtQgA/4SY\""
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVAcahxZyK4EJEQ="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Wrong auth token.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Patch Config",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"number_of_entries\": 10,\n    \"initial_amount\": 500\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/config"
+					},
+					"response": [
+						{
+							"name": "Patch Config_successful",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"number_of_entries\": 20,\n    \"initial_amount\": 5000\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/config"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:32:20 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "46"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"2e-Ctzzh0CTGh9fcBdGzXhhwhc4GKw\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVDCNjikSK4EJTw="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"number_of_entries\": 20,\n    \"initial_amount\": 5000\n}"
+						},
+						{
+							"name": "Patch Config_invalid body parameters-1",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"number_of_entries\": 30,\n    \"initial_amount\": 5000\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/config"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:32:39 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "71"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"47-+HyZdJ0kpYVtjDKpc08TaT7cmAM\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVDFKhzhSK4EJmA="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Number of entries must be between 5 and 25 (inclusively).\"\n}"
+						},
+						{
+							"name": "Patch Config_invalid body parameters-2",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"number_of_entries\": 10,\n    \"initial_amount\": -500\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/config"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:35:38 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "40"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"28-qMgGdlu/Xm3qjdVsfoFBZeIsVGo\""
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVDhNhxISK4EJkA="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Amount must be above zero.\"\n}"
+						},
+						{
+							"name": "Patch Config_auth required",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"number_of_entries\": 20,\n    \"initial_amount\": 500\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/config"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:15:18 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"1f-4yUdQzk0xrzeRWFQPUGtQgA/4SY\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVAikhchyK4EJ2Q="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Wrong auth token.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Config",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{Token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/config"
+					},
+					"response": [
+						{
+							"name": "Delete Config_successful",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": "{{baseUrl}}/config"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:37:06 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "29"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"1d-umOTOFsXppxz+b8EL4AH2oUKI4Y\""
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVDu7h7ByK4EJ7Q="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Data wiped out.\"\n}"
+						},
+						{
+							"name": "Delete Config_auth required",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": "{{baseUrl}}/config"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 05 Mar 2023 22:15:38 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"1f-4yUdQzk0xrzeRWFQPUGtQgA/4SY\""
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Apigw-Requestid",
+									"value": "BVAlpi2oyK4EJhg="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Wrong auth token.\"\n}"
+						}
+					]
+				}
+			],
+			"description": "##### Config edit and project reset (data wipe)."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

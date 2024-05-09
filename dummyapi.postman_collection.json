@@ -1,0 +1,1265 @@
+{
+	"info": {
+		"_postman_id": "c8fc8f3a-a2a8-4546-950c-f26e548ba553",
+		"name": "dummyapi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "27291499"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get all users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Format users data\", function () {\r",
+									"    var responseData = pm.response.json();\r",
+									"});\r",
+									"pm.test(\"Format users data\", function () {\r",
+									"    var responseData = pm.response.json(); \r",
+									"    var users = responseData.data; \r",
+									"\r",
+									"    pm.expect(users).to.be.an(\"array\"); \r",
+									"\r",
+									"    if (Array.isArray(users)) {\r",
+									"        users.forEach(function(user) {\r",
+									"            pm.expect(user).to.have.property(\"id\");\r",
+									"            pm.expect(user).to.have.property(\"firstName\");\r",
+									"            pm.expect(user).to.have.property(\"lastName\");\r",
+									"        });\r",
+									"    } else {\r",
+									"        console.error(\"User data is not represented as an array.\");\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{baseURL}}user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get all users by registration date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Data format is correct\", function () {\r",
+									"    var responseData = pm.response.json();\r",
+									"    pm.expect(responseData.data).to.be.an('array').that.is.not.empty;\r",
+									"});\r",
+									"pm.test(\"Users are ordered by registration date\", function () {\r",
+									"    var data = pm.response.json().data;\r",
+									"    var sortedUsers = data.slice().sort((a, b) => new Date(a.registrationDate) - new Date(b.registrationDate));\r",
+									"    pm.expect(data).to.deep.equal(sortedUsers);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}user?registerDate=10/01/2020",
+							"host": [
+								"{{baseURL}}user"
+							],
+							"query": [
+								{
+									"key": "registerDate",
+									"value": "10/01/2020"
+								},
+								{
+									"key": "status",
+									"value": "registerDate",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all users by title",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Check if jsonData.data is an array\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data).to.be.an('array');\r",
+									"});\r",
+									"pm.test(\"Check if all titles are different\", function () {\r",
+									"var uniqueTitles = new Set();\r",
+									"});\r",
+									" "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}user?title=mr",
+							"host": [
+								"{{baseURL}}user"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "mr"
+								},
+								{
+									"key": "status",
+									"value": "registerDate",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Get user by ID\"), function (){\r",
+									"pm.response.to.have.header (\"id:60d0fe4f5311236168a109ca\")};\r",
+									"\r",
+									"pm.test(\"Check that only one user is returned\", function () {\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.expect(jsonData.data).to.be.an('array');\r",
+									"pm.expect(jsonData.data).to.have.lengthOf(1);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}user?id=60d0fe4f5311236168a109ca",
+							"host": [
+								"{{baseURL}}user"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "60d0fe4f5311236168a109ca"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user by ID Copy",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}user?id=60d0fe4f5311236168a109ca",
+							"host": [
+								"{{baseURL}}user"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "60d0fe4f5311236168a109ca"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body is correct\", function () {\r",
+									"    pm.response.to.have.jsonBody({\r",
+									"        id: pm.expect(typeof pm.response.json().id).to.eql('string'),\r",
+									"        firstName: \"Maria\",\r",
+									"        lastName: \"Smith\",\r",
+									"        email: \"Test70@test.com\",\r",
+									"        registerDate: pm.expect(typeof pm.response.json().registerDate).to.eql('string'),\r",
+									"        updatedDate: pm.expect(typeof pm.response.json().updatedDate).to.eql('string')\r",
+									"    });\r",
+									"   "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Maria\",\r\n    \"lastName\": \"Smith\",\r\n    \"email\": \"Test70@test.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}user/create"
+					},
+					"response": []
+				},
+				{
+					"name": "Update user by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Person is Nina\", () => {\r",
+									"  const responseJson = pm.response.json();\r",
+									"  pm.expect(responseJson.firstName).to.eql(\"Nina\");\r",
+									"  pm.expect(responseJson.lastName).to.eql(\"Smith\");\r",
+									"  pm.expect(responseJson.email).to.eql(\"test123@qatest.com\");\r",
+									"});\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Nina\",\r\n    \"lastName\": \"Smith\",\r\n    \"email\":\"test?@testqa.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}user/662ebc3504ec2ec65d075511"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Delete request is successful\", function () {\r",
+									"    pm.response.to.have.status(200); \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Console log confirms user deletion\", function () {\r",
+									"    console.log(\"User is deleted from the list\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Deleted user is no longer in the list\", function() { \r",
+									"    pm.expect(pm.response.text()).to.not.include(\"Karoline\"); \r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseURL}}user/60d0fe4f5311236168a109d8"
+					},
+					"response": []
+				},
+				{
+					"name": "Get user by deleted Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get user by deleted ID\", function(){\r",
+									"pm.expect(\"RESOURCE_NOT_FOUND\");});\r",
+									"pm.test(\"Status code is 404\", function(){\r",
+									"pm.response.to.have.status(404);});   \r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{baseURL}}user/60d0fe4f5311236168a109ca"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Post",
+			"item": [
+				{
+					"name": "Get all posts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function() {\r",
+									"pm.response.to.have.status (200);});\r",
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"pm.test(\"User get all posts\", function (){ \r",
+									"    pm.expect(\"User get list of all posts\")\r",
+									"})\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{baseURL}}post"
+					},
+					"response": []
+				},
+				{
+					"name": "Get posts by creation date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Posts are sorted by creation date\", function () {\r",
+									"    var response = pm.response.json();\r",
+									"    var posts = response.data;\r",
+									"\r",
+									"    pm.expect(posts).to.be.an('array').and.to.have.length.above(0);\r",
+									"\r",
+									"    for (var i = 1; i < posts.length; i++) {\r",
+									"        var previousDate = new Date(\"2022-01-10\", posts[i - 1].creationDate); \r",
+									"        var currentDate = new Date(\"2022-01-10\", posts[i].creationDate); \r",
+									"        pm.expect(previousDate).to.be.above(currentDate); \r",
+									"    }\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}post?publishDate=2022/10/01",
+							"host": [
+								"{{baseURL}}post"
+							],
+							"query": [
+								{
+									"key": "publishDate",
+									"value": "2022/10/01"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get list by tag",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get all posts with tag dog\", function () {\r",
+									"    pm.sendRequest({\r",
+									"        url: 'https://dummyapi.io/data/v1/?tag=dog', \r",
+									"        method: 'GET',\r",
+									"        header: {\r",
+									"            'Content-Type': 'application/json'\r",
+									"        }\r",
+									"    }, function (err, res) {\r",
+									"        var posts = res.json(); \r",
+									"        for (var i = 0; i < posts.length; i++) {\r",
+									"            pm.expect(posts[i].tags).to.be.an('array'); \r",
+									"            pm.expect(posts[i].tags).to.include('dog'); \r",
+									"        }\r",
+									"    });\r",
+									"});\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.expect('code', 200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}post?tag=dog",
+							"host": [
+								"{{baseURL}}post"
+							],
+							"query": [
+								{
+									"key": "tag",
+									"value": "dog"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get post by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"firstName is Sibylle\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.owner.firstName).to.eql(\"Sibylle\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 200ms\", () => {\r",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{baseURL}}post/60d21b3a67d0d8992e610c60"
+					},
+					"response": []
+				},
+				{
+					"name": "Create post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response time is less than 200ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"});\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.eql(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Bavarian-Alps-Mountain-range-in-Germany-Beautiful-Winter\",\r\n    \"image\": \"Bavarian-Alps-Mountain-range-in-Germany-Beautiful-Winter-Landscape-HD-Wallpapers-For-Tablets-Free-Download-Best-HD-Desktop-Wallpapers-3840x2400.jpg\",\r\n    \"likes\": \"150\",\r\n    \"tags\": \"mountain\",\r\n    \"owner\": \"60d0fe4f5311236168a109d0\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}post/create"
+					},
+					"response": []
+				},
+				{
+					"name": "Update post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Check if key 'likes' exists and its value is 200\", function () {\r",
+									"const responseJson = pm.response.json(); \r",
+									"pm.expect(responseJson.likes).to.eql(\"200\"); \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check post id is 60d21b3a67d0d8992e610c60\", function(){\r",
+									"const responseJson= pm.response.json();\r",
+									"pm.expect(\"60d21b3a67d0d8992e610c60)\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"likes\": \"200\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}post/60d21b3a67d0d8992e610c60"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Delete post\", function () {\r",
+									"pm.sendRequest({\r",
+									"        url: 'https://dummyapi.io/data/v1/6637c1d1906c3a8b9bc726ad', \r",
+									"        method: 'DELETE',\r",
+									"        headers: {\r",
+									"            'Authorization': 'API key 662eb264bb70a7509c259844' \r",
+									"        }\r",
+									"}, function (err, res) {\r",
+									"pm.response.to.have.status(200);\r",
+									"    });\r",
+									"});\r",
+									"pm.test (\"responseJson is deleted post id\", function(){\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect (responseJson.id).to.eql(\"6637c1d1906c3a8b9bc726ad\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseURL}}post/6637c1d1906c3a8b9bc726ad"
+					},
+					"response": []
+				},
+				{
+					"name": "Get post by deleted ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"responseJson is 'RESOURCE_NOT_FOUND'\", function(){\r",
+									"const responseJson = pm.response.json();\r",
+									"pm.expect (responseJson).is.eql({error:'RESOURCE_NOT_FOUND'});\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{baseURL}}post/60d21b8667d0d8992e610d3f"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comment",
+			"item": [
+				{
+					"name": "Create new comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Verify the message of the created comment is 'Unforgotten trip'\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.message).to.eql(\"Unforgotten trip\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"message\": \"Unforgotten trip\",\r\n    \"owner\": \"60d0fe4f5311236168a10a0f\",\r\n    \"post\": \"60d21baa67d0d8992e610da7\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}comment/create"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete comment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify response contains the ID of the deleted resource\", function() {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    const deletedResourceId = '6637e6cb10f9d4888a440b6d'; \r",
+									"    pm.expect(responseJson.id).to.eql(deletedResourceId);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseURL}}comment/6637e6cb10f9d4888a440b6d"
+					},
+					"response": []
+				},
+				{
+					"name": "Get comment by deleted ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get comment by deleted ID\", function() {\r",
+									"    pm.response.to.not.be.null;\r",
+									"    const responseBody = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(responseBody.error).to.eql('PATH_NOT_FOUND');\r",
+									"});\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{baseURL}}comment/6637e6cb10f9d4888a440b6d"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tag",
+			"item": [
+				{
+					"name": "Get list of tag",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"tag\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"key": "app-id",
+								"value": "662eb264bb70a7509c259844"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{baseURL}}tag"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Negative tests",
+			"item": [
+				{
+					"name": "Get all users with invalid aap-id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"const invalidAppId = '662eb264bb70a7509c2598445'; \r",
+									"\r",
+									"pm.sendRequest({\r",
+									"    url: 'https://dummyapi.io/data/v1/user',\r",
+									"    auth: {\r",
+									"        'app-id': invalidAppId\r",
+									"    }\r",
+									"}, function(err, response) {\r",
+									"    if (err) {\r",
+									"        console.error('APP_ID_NOT_EXIST', err);\r",
+									"        return;\r",
+									"    }\r",
+									"\r",
+									"    pm.test(\"Get all users with invalid aap-id\", function() {\r",
+									"        pm.expect(response).to.have.status(403); \r",
+									"        const responseBody = response.json();\r",
+									"        pm.expect(responseBody.error).to.exist;\r",
+									"        pm.expect(responseBody.error).to.eql('APP_ID_NOT_EXIST'); \r",
+									"    });\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"in": "header",
+								"value": "662eb264bb70a7509c2598445",
+								"key": "app-id"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{baseURL}}user"
+					},
+					"response": []
+				},
+				{
+					"name": "Create user with invalid data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 \", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"pm.test(\"Body contains 'error: BODY_NOT_VALID'\", function () {\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.expect(jsonData.error).to.eql(\"BODY_NOT_VALID\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"value": "662eb264bb70a7509c259844",
+								"in": "header",
+								"key": "app-id"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"U\",\r\n    \"lastName\": \"K\",\r\n    \"email\": \"test123@test123.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}user/create"
+					},
+					"response": []
+				},
+				{
+					"name": "Create user with invalid data Copy",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"value": "662eb264bb70a7509c259844",
+								"in": "header",
+								"key": "app-id"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Kim\",\r\n    \"lastName\": \"Rose\",\r\n    \"email\": \"test123test123.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}user/create"
+					},
+					"response": []
+				},
+				{
+					"name": "Create user with invalid data Copy 2",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"value": "662eb264bb70a7509c259844",
+								"in": "header",
+								"key": "app-id"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"\",\r\n    \"lastName\": \"\",\r\n    \"email\": \"test123@test123.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}user/create"
+					},
+					"response": []
+				},
+				{
+					"name": "Create user with invalid data Copy 3",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"value": "662eb264bb70a7509c259844",
+								"in": "header",
+								"key": "app-id"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Kim\",\r\n    \"lastName\": \"Rose\",\r\n    \"email\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}user/create"
+					},
+					"response": []
+				},
+				{
+					"name": "Update user by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Check if firstName is Lusy\", function(){\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.firstName).to.eql(\"Lusy\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"value": "662eb264bb70a7509c259844",
+								"in": "header",
+								"key": "app-id"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Lusy\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}user/60d0fe4f5311236168a109d0"
+					},
+					"response": []
+				},
+				{
+					"name": "Create post for deleted user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Create post for deleted user\", function(){\r",
+									"    var responseData = JSON.parse(responseBody);\r",
+									"    pm.expect(responseData.error).to.eql(\"BODY_NOT_VALID\");\r",
+									"});\r",
+									"pm.test(\"Check error message\", function(){\r",
+									"var responseData = JSON.parse(responseBody);\r",
+									"pm.expect(responseData.error).to.eql(\"BODY_NOT_VALID\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"value": "662eb264bb70a7509c259844",
+								"in": "header",
+								"key": "app-id"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"text\": \"Hello\",\r\n\"image\": \"4723250.jpg\",\r\n\"likes\": \"50\",\r\n\"tags\": \"mountain\",\r\n\"owner\": \"60d0fe4f5311236168a109d8\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}post/create"
+					},
+					"response": []
+				},
+				{
+					"name": "Create comment for deleted post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check error message\", function(){\r",
+									"    var responseData = pm.response.json();\r",
+									"    pm.expect(responseData.error).to.eql(\"BODY_NOT_VALID\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": {
+								"value": "662eb264bb70a7509c259844",
+								"in": "header",
+								"key": "app-id"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"message\": \"Funny trip\",\r\n    \"owner\": \"60d0fe4f5311236168a109cb\",\r\n    \"post\": \"6637c1d1906c3a8b9bc726ad\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}comment/create"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
